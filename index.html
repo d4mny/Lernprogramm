@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <title>LernProgramm</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" sizes="512x512" href="bilder/icon-512.png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="ROBOTS" content="INDEX, FOLLOW"/>
+
+    <link rel="stylesheet" href="css/styles.css" type="text/css"/>
+    <script src="js/app.js" type="text/javascript" defer></script>
+    <link rel="stylesheet" href="scripts/katex/katex.min.css" type="text/css"/>
+    <script src="scripts/katex/katex.min.js" type="text/javascript" defer></script>
+    <script src="scripts/katex/auto-render.min.js" type="text/javascript" defer></script>
+
+    <noscript>
+        Sie haben JavaScript deaktiviert. Diese Seite benötigt zwingend JavaScript.
+    </noscript>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="#" onclick="showHome(); return false">Home</a>
+        <a href="#" onclick="showCategory('mathe'); return false">Mathematik</a>
+        <a href="#" onclick="showCategory('it'); return false">Internettechnologien</a>
+        <a href="#" onclick="showCategory('allgemein'); return false">Allgemein</a>
+    </nav>
+</header>
+
+<main>
+    <section id="home">
+        <h1>Willkommen zur Lernplattform</h1>
+        <p>Hier können Sie Ihre Kenntnisse in Mathematik, Internettechnologien und allgemeinem Wissen testen.</p>
+    </section>
+
+    <section id="quiz" style="display: none;">
+        <h1 id="category-title">Kategorie</h1>
+        <div class="container">
+            <p>Nutze REST-API:</p>
+            <label class="switch">
+                <input id="toggle-api" type="checkbox" onclick="toggleApi()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <button id="start-quiz-button" class="button" onclick="startQuiz()">Quiz starten</button>
+    </section>
+
+    <section id="question" style="display: none;">
+        <h2 id="quiz-question">Frage</h2>
+        <div class="quiz-answers">
+            <button id="answer0" class="quiz-button" onclick="checkAnswer(0)">Antwort 1</button>
+            <button id="answer1" class="quiz-button" onclick="checkAnswer(1)">Antwort 2</button>
+            <button id="answer2" class="quiz-button" onclick="checkAnswer(2)">Antwort 3</button>
+            <button id="answer3" class="quiz-button" onclick="checkAnswer(3)">Antwort 4</button>
+        </div>
+        <div id="progress-container">
+            <progress id="progress-bar" value="0" max="100"></progress>
+        </div>
+    </section>
+
+    <section id="result" style="display: none;">
+        <h2>Ergebnis</h2>
+        <p id="result-stats">Sie haben <span id="correct-answers">0</span> von <span id="total-questions">0</span> Fragen richtig beantwortet.</p>
+        <button class="button" onclick="restartQuiz()">Quiz neu starten</button>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 LernProgramm</p>
+</footer>
+</body>
+</html>
