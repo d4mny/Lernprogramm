@@ -1,17 +1,53 @@
 {
-    "teil-mathe": [
-        {"a": "x^2 + x^2", "l": ["2x^2", "x^4", "x^8", "2x^4"]},
-        {"a": "x^2 * x^2", "l": ["x^4", "x^2", "2x^2", "4x"]}
+    "mathematik": [
+        {"a": "10!", "l": ["3628800", "40320", "720", "5040"]},
+        {"a": "f'(x) = 3x^2 + 2x + 1", "l": ["6x + 2", "3x^2 + 2x", "3x^2 + 2", "6x + 1"]},
+        {"a": "x^2 - 4 = 0", "l": ["x = -2, 2", "x = -4, 4", "x = -1, 1", "x = -3, 3"]},
+        {"a": "\\int 2x \\, dx", "l": ["x^2 + C", "2x + C", "x + C", "2x^2 + C"]},
+        {"a": "\\lim_{{x \\to \\infty}} \\frac{1}{x}", "l": ["0", "\\infty", "1", "-\\infty"]},
+        {"a": "\\det \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}", "l": ["ad - bc", "ab - cd", "ac - bd", "a + d - b - c"]},
+        {"a": "\\log 100", "l": ["2", "1", "10", "100"]},
+        {"a": "3^4", "l": ["81", "27", "12", "64"]},
+        {"a": "\\frac{d}{dx} \\sin(x)", "l": ["\\cos(x)", "-\\sin(x)", "-\\cos(x)", "\\sin(x)"]},
+        {"a": "\\binom{5}{2}", "l": ["10", "20", "5", "15"]}
     ],
-    "teil-internettechnologien": [
+
+    "internettechnologien": [
         {"a": "Welche Authentifizierung bietet HTTP", "l": ["Digest Access Authentication", "OTP", "OAuth", "2-Faktor-Authentifizierung"]},
-        {"a": "Welches Transportprotokoll eignet sich für zeitkritische Übertragungen", "l": ["UDP", "TCP", "HTTP", "Fast Retransmit"]}
+        {"a": "Welches Transportprotokoll eignet sich für zeitkritische Übertragungen", "l": ["UDP", "TCP", "HTTP", "Fast Retransmit"]},
+        {"a": "Was bedeutet CSS?", "l": ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style Sheets", "Colorful Style Sheets"]},
+        {"a": "Wofür steht HTML?", "l": ["HyperText Markup Language", "Hyperlinks and Text Markup Language", "Home Tool Markup Language", "Hyper Transfer Markup Language"]},
+        {"a": "Welches Protokoll wird häufig zum Senden von E-Mails verwendet?", "l": ["SMTP", "FTP", "HTTP", "IMAP"]},
+        {"a": "Was bedeutet HTTP?", "l": ["HyperText Transfer Protocol", "HyperText Transport Protocol", "HyperText Translation Protocol", "HyperText Transmission Protocol"]},
+        {"a": "Wofür steht IP?", "l": ["Internet Protocol", "Internet Package", "Internet Process", "Internet Procedure"]},
+        {"a": "Welches Port verwendet HTTPS standardmäßig?", "l": ["443", "80", "21", "22"]},
+        {"a": "Was bedeutet REST?", "l": ["Representational State Transfer", "Real State Transfer", "Remote State Transfer", "Rapid State Transfer"]},
+        {"a": "Welcher HTTP-Statuscode bedeutet 'Nicht gefunden'?", "l": ["404", "200", "500", "301"]}
     ],
-    "teil-allgemein": [
-        {"a": "Karl der Große, Geburtsjahr", "l": ["747", "828", "650", "1150"]}
+    "allgemeinwissen": [
+        {"a": "Karl der Große, Geburtsjahr", "l": ["747", "828", "650", "1150"]},
+        {"a": "Hauptstadt von Frankreich", "l": ["Paris", "Berlin", "Rom", "Madrid"]},
+        {"a": "Welches Element hat das chemische Symbol O?", "l": ["Sauerstoff", "Gold", "Silber", "Wasserstoff"]},
+        {"a": "Wie viele Planeten hat unser Sonnensystem?", "l": ["8", "9", "7", "10"]},
+        {"a": "Wer schrieb 'Die Verwandlung'?", "l": ["Franz Kafka", "Thomas Mann", "Johann Wolfgang von Goethe", "Friedrich Schiller"]},
+        {"a": "Welches Land hat die größte Bevölkerung?", "l": ["China", "Indien", "USA", "Indonesien"]},
+        {"a": "Welches Jahr endete der Zweite Weltkrieg?", "l": ["1945", "1944", "1943", "1946"]},
+        {"a": "Wie viele Kontinente gibt es?", "l": ["7", "6", "5", "8"]},
+        {"a": "Was ist die Hauptstadt von Japan?", "l": ["Tokio", "Kyoto", "Osaka", "Nagoya"]},
+        {"a": "Welcher Planet ist der größte in unserem Sonnensystem?", "l": ["Jupiter", "Saturn", "Uranus", "Neptun"]}
     ],
-    "teil-noten": [
-        {"a": "C4", "l": ["C", "D", "E", "H"]},
-        {"a": "(C4 E4 G4)", "l": ["C", "H", "F", "D"]}
-    ]
-}
+    
+        "noten": [
+            {"a": "Welche Note liegt eine Oktave niedriger als C5", "l": ["c/4", "d/4", "e/4", "f/4"]},
+            {"a": "e/4", "l": ["c/4", "e/4", "f/4", "d/4"]},
+            {"a": "g/4", "l": ["g/4", "a/4", "b/4", "c/4"]},
+            {"a": "d/4", "l": ["d/4", "e/4", "f/4", "g/4"]},
+            {"a": "a/4", "l": ["a/4", "b/4", "c/5", "d/5"]},
+            {"a": "b/4", "l": ["b/4", "c/5", "d/5", "e/5"]},
+            {"a": "f/4", "l": ["f/4", "g/4", "a/4", "b/4"]},
+            {"a": "c/5", "l": ["c/5", "d/5", "e/5", "f/5"]},
+            {"a": "e/5", "l": ["e/5", "f/5", "g/5", "a/5"]},
+            {"a": "g/5", "l": ["g/5", "a/5", "b/5", "c/6"]}
+        ]
+    }
+    
