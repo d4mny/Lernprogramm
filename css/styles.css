@@ -85,6 +85,18 @@ button.button:hover {
     height: 15vh;
 }
 
+.start-quiz-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    text-align: center;
+    display: inline-block;
+    margin: 0.5em 0.5em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
 .main-button {
     background-color: #6aeeff;
     cursor: pointer;
@@ -127,6 +139,43 @@ footer {
 .hide {
     display: none;
 }
+
+.circle-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
+
+.progress-circle {
+    transform: rotate(-90deg);
+}
+
+.bg-circle {
+    fill: none;
+    stroke: rgb(255, 0, 0);
+    stroke-width: 20;
+}
+
+.progress {
+    fill: none;
+    stroke: rgb(17, 133, 17);
+    stroke-width: 20;
+    stroke-dasharray: 565.48; /* 2 * Math.PI * 90 */
+    stroke-dashoffset: 565.48;
+    transition: stroke-dashoffset 1s;
+}
+
+.circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.2em;
+}
+
+
 
 @media (max-height: 57em), (max-width: 70em) {
     .quiz-answers {

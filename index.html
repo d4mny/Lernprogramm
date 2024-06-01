@@ -53,7 +53,7 @@
 
     <section id="quiz" style="display: none;">
         <h1 id="category-title">Kategorie</h1>
-        <button id="start-quiz-button" class="button" onclick="startQuiz()">Quiz starten</button>
+        <button id="start-quiz-button" class="start-quiz-button" onclick="startQuiz(); startQuizAndHideButton()">Quiz starten</button>
     </section>
 
     <section id="question" style="display: none;">
@@ -69,6 +69,13 @@
     <section id="result" style="display: none;">
         <h2>Ergebnis</h2>
         <p id="result-stats">Sie haben <span id="correct-answers">0</span> von <span id="total-questions">0</span> Fragen richtig beantwortet.</p>
+        <div class="circle-container">
+            <svg class="progress-circle" width="200" height="200">
+                <circle class="bg-circle" cx="100" cy="100" r="90"></circle>
+                <circle class="progress" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="circle-text" id="percentage-text">0%</div>
+        </div>
         <button class="button" onclick="restartQuiz()">Quiz neu starten</button>
     </section>
 </main>

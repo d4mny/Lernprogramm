@@ -37,19 +37,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('footer-title').innerText = 'Lernprogramm Danny Miersch';
     };
 
-    // Zeige die Quiz-Kategorie an
-    const showCategory = (category) => {
-        categoryTitle.textContent = categories[category];
-        homeSection.style.display = 'none';
-        quizSection.style.display = 'block';
-        questionSection.style.display = 'none';
-        resultSection.style.display = 'none';
-        currentQuestionIndex = 0; // Setze den Frageindex zurück
-        correctAnswers = 0; // Setze die korrekten Antworten zurück
-        progressBar.value = 0; // Setze die Fortschrittsanzeige zurück
-        document.getElementById('progress-container').classList.remove('hide');
-        document.getElementById('footer-title').innerText = 'Lernfortschritt';
-    };
+   // Zeige die Quiz-Kategorie an
+const showCategory = (category) => {
+    categoryTitle.textContent = categories[category];
+    homeSection.style.display = 'none';
+    quizSection.style.display = 'block';
+    questionSection.style.display = 'none';
+    resultSection.style.display = 'none';
+    currentQuestionIndex = 0; // Setze den Frageindex zurück
+    correctAnswers = 0; // Setze die korrekten Antworten zurück
+    progressBar.value = 0; // Setze die Fortschrittsanzeige zurück
+    document.getElementById('progress-container').classList.remove('hide');
+    document.getElementById('footer-title').innerText = 'Lernfortschritt';
+    document.getElementById('start-quiz-button').style.display = 'block';
+};
 
     // Wechsel zwischen API und lokalen Fragen
     const toggleApi = () => {
@@ -105,6 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    //window macht die Funktionen global verfügbar
+    window.startQuizAndHideButton = function() {
+        // Starte das Quiz
+        startQuiz();
+    
+        // Verstecke den "Quiz starten"-Button
+        document.getElementById('start-quiz-button').style.display = 'none';
+    }
+
     // Starte das Quiz
     const startQuiz = async () => {
         if (useApi) {
@@ -123,14 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (questions.length > 0) {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
-                if (categoryTitle.textContent.toLowerCase() === 'mathematik') {
-                    katex.render(question.a, quizQuestion);}
-                 else {
-                    quizQuestion.textContent = question.a;
-                }
-                const answers = shuffleArray(question.l);
+                const correctAnswer = question.l[0];  // Speichern der richtigen Antwort
+                const answers = shuffleArray([...question.l]);  // Mischen der Antworten
                 answerButtons.forEach((button, index) => {
-                    button.dataset.answer = answers[index];  // Speichern der ursprünglichen Antwort in einem Datenattribut
+                    button.dataset.answer = answers[index];  // Speichern der gemischten Antwort in einem Datenattribut
                     if (categoryTitle.textContent.toLowerCase() === 'noten') {
                         renderNote(answers[index].toLowerCase(), button.id);  // Erstellen der Note im Button
                     } else if (categoryTitle.textContent.toLowerCase() === 'mathematik') {
@@ -138,8 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         button.textContent = answers[index];
                     }
+                    if (answers[index] === correctAnswer) {  // Wenn die gemischte Antwort die richtige ist, speichern Sie diese in einem anderen Datenattribut
+                        button.dataset.correct = 'true';
+                    } else {
+                        button.dataset.correct = 'false';
+                    }
                 });
-                progressBar.value = ((currentQuestionIndex + 1) / questions.length) * 100;
+                // Setzen Sie die Frage entsprechend der Kategorie
+                if (categoryTitle.textContent.toLowerCase() === 'mathematik') {
+                    katex.render(question.a, quizQuestion);
+                } else {
+                    quizQuestion.textContent = question.a;
+                }
                 questionSection.style.display = 'block';
             } else {
                 showResult();
@@ -148,16 +164,19 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Keine Fragen geladen.');
         }
     };
-
-    // Überprüfe die Antwort
+    
     const checkAnswer = (index) => {
-        const question = questions[currentQuestionIndex];
-        if (answerButtons[index].dataset.answer === question.l[0]) {  // Überprüfen des Datenattributs anstelle des Textinhalts
+        if (answerButtons[index].dataset.correct === 'true') {  // Überprüfen des Datenattributs anstelle des Textinhalts
             correctAnswers++;
         }
         currentQuestionIndex++;
         showQuestion();
+        // Aktualisiere die Progress-Bar nach dem Beantworten der Frage
+        if (currentQuestionIndex > 0) {
+            progressBar.value = (currentQuestionIndex / questions.length) * 100;
+        }
     };
+    
 
     // Zeige das Ergebnis an
     const showResult = () => {
@@ -165,8 +184,40 @@ document.addEventListener('DOMContentLoaded', () => {
         resultSection.style.display = 'block';
         correctAnswersSpan.textContent = correctAnswers;
         totalQuestionsSpan.textContent = questions.length;
-    };
+    
+        const totalQuestions = questions.length;
+        const correctPercentage = (correctAnswers / totalQuestions) * 100;
+    
+        document.getElementById('percentage-text').textContent = correctPercentage.toFixed(0) + '%';
+    
+        const progressCircle = document.querySelector('.progress');
+        const offset = 565.48 - (565.48 * correctPercentage / 100);
+        progressCircle.style.strokeDashoffset = offset;
+    
+        let message;
+        if (correctPercentage < 20) {
+            message = "Oh Oh, da muss aber jemand noch fleißig lernen.";
+        } else if (correctPercentage >= 20 && correctPercentage < 40) {
+            message = "An einem guten Tag reicht's fürs Bestehen.";
+        } else if (correctPercentage >= 40 && correctPercentage < 60) {
+            message = "Hey! du weißt schonmal mehr als ich :)";
+        } else if (correctPercentage >= 60 && correctPercentage < 80) {
+            message = "Oha wie stark! Du kannst ja doch was.";
+        } else if (correctPercentage >= 80 && correctPercentage < 100) {
+            message = "Jetzt übertreib mal nicht, wen willst du hier beeindrucken, hmm?";
+        } else if (correctPercentage === 100) {
+            message = "Ja okay Man, ich hab's verstanden. Du bist besser als ich. Pfff.";
+        }
+    
+        const messageElement = document.createElement('p');
+    messageElement.textContent = message;
+    resultSection.appendChild(messageElement);
+    setTimeout(() => {
+        messageElement.remove();
+    }, 5000);  
+};
 
+    
     // Starte das Quiz neu
     const restartQuiz = () => {
         showHome();
