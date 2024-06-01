@@ -72,18 +72,18 @@ const showCategory = (category) => {
         context.scale(0.6, 0.6);
         context.setFont('Arial', 10, '').setBackgroundFillStyle('#eed');
     
-        // Zeichne eine Note
+        // Zeichnen der Note
         const stave = new VF.Stave(10, 40, 100);
         stave.addClef('treble').setContext(context).draw();
     
-        // Erstelle eine Note
+        // Erstellen der Note
         const notes = new VF.StaveNote({
             clef: 'treble',
             keys: [note],
             duration: 'q'
         });
     
-        // Stimme hinzufügen (optional, um die Note optisch korrekt darzustellen)
+        // Stimme hinzufügen
         const voice = new VF.Voice({ num_beats: 1, beat_value: 4 });
         voice.addTickables([notes]);
     
@@ -106,12 +106,8 @@ const showCategory = (category) => {
         }
     };
 
-    //window macht die Funktionen global verfügbar
-    window.startQuizAndHideButton = function() {
-        // Starte das Quiz
+    startQuizAndHideButton = function() { //window macht die Funktionen global verfügbar
         startQuiz();
-    
-        // Verstecke den "Quiz starten"-Button
         document.getElementById('start-quiz-button').style.display = 'none';
     }
 
@@ -128,7 +124,7 @@ const showCategory = (category) => {
         showQuestion();
     };
 
-    // Zeige eine Frage an
+    //Anzeigen der Frage
     const showQuestion = () => {
         if (questions.length > 0) {
             if (currentQuestionIndex < questions.length) {
@@ -144,13 +140,13 @@ const showCategory = (category) => {
                     } else {
                         button.textContent = answers[index];
                     }
-                    if (answers[index] === correctAnswer) {  // Wenn die gemischte Antwort die richtige ist, speichern Sie diese in einem anderen Datenattribut
+                    if (answers[index] === correctAnswer) {  // Wenn die gemischte Antwort die richtige ist, speichert es in einem anderen Datenattribut
                         button.dataset.correct = 'true';
                     } else {
                         button.dataset.correct = 'false';
                     }
                 });
-                // Setzen Sie die Frage entsprechend der Kategorie
+                // Frage mit Katex rendering in mathe
                 if (categoryTitle.textContent.toLowerCase() === 'mathematik') {
                     katex.render(question.a, quizQuestion);
                 } else {
@@ -171,14 +167,14 @@ const showCategory = (category) => {
         }
         currentQuestionIndex++;
         showQuestion();
-        // Aktualisiere die Progress-Bar nach dem Beantworten der Frage
+        // Aktualisieren der Progress-Bar nach dem Beantworten der Frage
         if (currentQuestionIndex > 0) {
             progressBar.value = (currentQuestionIndex / questions.length) * 100;
         }
     };
     
 
-    // Zeige das Ergebnis an
+    // Anzeigen des Ergebnis
     const showResult = () => {
         questionSection.style.display = 'none';
         resultSection.style.display = 'block';
@@ -250,6 +246,7 @@ const showCategory = (category) => {
     window.startQuiz = startQuiz;
     window.checkAnswer = checkAnswer;
     window.restartQuiz = restartQuiz;
+    window.startQuizAndHideButton = startQuizAndHideButton;
 
     // Zeige die Startseite an
     showHome();
