@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Globale Variablen zur Verwaltung des Quiz-Zustands
     let questions = [];
+    let originalQuestions = [];
     let currentQuestionIndex = 0;
     let correctAnswers = 0;
     let useApi = false;
@@ -144,17 +145,18 @@ const showCategory = (category) => {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
                 const correctAnswer = question.l[0];  // Speichern der richtigen Antwort
-                const answers = shuffleArray([...question.l]);  // Mischen der Antworten
+                const answers = shuffleArrayWithOriginalIndices(question.l);  // Mischen der Antworten und Speichern der ursprünglichen Indizes
                 answerButtons.forEach((button, index) => {
-                    button.dataset.answer = answers[index];  // Speichern der gemischten Antwort in einem Datenattribut
+                    button.dataset.answer = answers[index].value;  // Speichern der gemischten Antwort in einem Datenattribut
+                    button.dataset.originalIndex = answers[index].originalIndex;  // Speichern des ursprünglichen Index
                     if (categoryTitle.textContent.toLowerCase() === 'noten') {
-                        renderNote(answers[index].toLowerCase(), button.id);  // Erstellen der Note im Button
+                        renderNote(answers[index].value.toLowerCase(), button.id);  // Erstellen der Note im Button
                     } else if (categoryTitle.textContent.toLowerCase() === 'mathematik') {
-                        katex.render(answers[index], button);
+                        katex.render(answers[index].value, button);
                     } else {
-                        button.textContent = answers[index];
+                        button.textContent = answers[index].value;
                     }
-                    if (answers[index] === correctAnswer) {  // Wenn die gemischte Antwort die richtige ist, speichert es in einem anderen Datenattribut
+                    if (answers[index].value === correctAnswer) {  // Wenn die gemischte Antwort die richtige ist, speichert es in einem anderen Datenattribut
                         button.dataset.correct = 'true';
                     } else {
                         button.dataset.correct = 'false';
@@ -171,17 +173,31 @@ const showCategory = (category) => {
                 showResult();
             }
         } else {
-            console.log('Keine Fragen geladen.');
-            loadQuestionsFromApi();
-            console.log('Lade Fragen erneut...');
-            showQuestion();
+            if (useApi === true) {
+                console.log('Keine Fragen geladen.');
+                loadQuestionsFromApi();
+                console.log('Lade Fragen erneut...');
+                showQuestion();
+            }
         }
     };
+
+
+    // Funktion zum Mischen eines Arrays und Speichern der ursprünglichen Indizes
+const shuffleArrayWithOriginalIndices = (array) => {
+    const originalArray = array.map((value, index) => ({ value, originalIndex: index }));
+    for (let i = originalArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [originalArray[i], originalArray[j]] = [originalArray[j], originalArray[i]];
+    }
+    return originalArray;
+};
     
     // Funktion zur Überprüfung der Antwort
     const checkAnswer = async (index) => {
         if (useApi) {
-            const result = await checkAnswerExternHTW(index); // Übergeben Sie den Index des gedrückten Knopfes
+            const originalIndex = parseInt(answerButtons[index].dataset.originalIndex, 10);
+            const result = await checkAnswerExternHTW(originalIndex); // Übergib den ursprünglichen Index des gedrückten Knopfes
             if (result === 1) {
                 correctAnswers++;
             }
@@ -277,6 +293,7 @@ const loadQuestionsFromApi = async () => {
         // Wenn keine Fragen geladen wurden, rufe die Funktion erneut auf
         if (questionsFromApi.length === 0) {
             console.log('Keine Fragen geladen, versuche es erneut...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
             return loadQuestionsFromApi();
         }
 
