@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
+     // Element-Referenzen für verschiedene Abschnitte der Anwendung
     const homeSection = document.getElementById('home');
     const quizSection = document.getElementById('quiz');
     const questionSection = document.getElementById('question');
@@ -12,19 +13,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalQuestionsSpan = document.getElementById('total-questions');
     const answerButtons = document.querySelectorAll('.quiz-button');
 
+    // Kategorien für die Quizfragen
     const categories = {
+        htwfragen: 'Fragen von Server',
         mathe: 'Mathematik',
         it: 'Internettechnologien',
         allgemein: 'Allgemeinwissen',
         noten: 'Noten'
     };
 
+    // Globale Variablen zur Verwaltung des Quiz-Zustands
     let questions = [];
     let currentQuestionIndex = 0;
     let correctAnswers = 0;
     let useApi = false;
+    let currentCategory = null;
+    let QuizId;
 
-    // Initialisierung der Startseite
+
+    // Funktion zum Anzeigen der Startseite
     const showHome = () => {
         homeSection.style.display = 'block';
         quizSection.style.display = 'none';
@@ -37,8 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('footer-title').innerText = 'Lernprogramm Danny Miersch';
     };
 
-   // Zeige die Quiz-Kategorie an
+   // Funktion zum Anzeigen der ausgewählten Quiz-Kategorie
 const showCategory = (category) => {
+    currentCategory = category;
     categoryTitle.textContent = categories[category];
     homeSection.style.display = 'none';
     quizSection.style.display = 'block';
@@ -53,9 +61,13 @@ const showCategory = (category) => {
 };
 
     // Wechsel zwischen API und lokalen Fragen
-    const toggleApi = () => {
-        useApi = !useApi;
+    const enableApi = () => {
+        useApi = true;
     };
+
+    const disableApi = () => {
+        useApi = false;
+    }
 
     // Render-Funktion für Noten mit VexFlow
     const renderNote = (note, elementId) => {
@@ -92,7 +104,8 @@ const showCategory = (category) => {
         voice.draw(context, stave);
     };
 
-    // Lade Fragen aus einer JSON-Datei
+    // Lade Fragen aus einer lokalen JSON-Datei
+     //"a": ist die Frage, welche angezgeigt wird. "l": sind die Antwortmöglichkeiten. Die Antwortmöglichkeit ist immer die richtige Antwort. Fromattierung muss für korrekte Funktionalität beibehalten werden.
     const loadQuestions = async (category) => {
         try {
             const response = await fetch('/data/questions.json');
@@ -106,14 +119,15 @@ const showCategory = (category) => {
         }
     };
 
-    startQuizAndHideButton = function() { //window macht die Funktionen global verfügbar
+    // Funktion zum Ausblenden des Start-Quiz-Buttons
+    window.startQuizAndHideButton = function() { //Window macht die Funktionen global verfügbar
         startQuiz();
         document.getElementById('start-quiz-button').style.display = 'none';
     }
 
     // Starte das Quiz
     const startQuiz = async () => {
-        if (useApi) {
+        if (useApi===true) {
             await loadQuestionsFromApi();
         } else {
             const category = categoryTitle.textContent.toLowerCase().replace(' ', '');
@@ -158,12 +172,23 @@ const showCategory = (category) => {
             }
         } else {
             console.log('Keine Fragen geladen.');
+            loadQuestionsFromApi();
+            console.log('Lade Fragen erneut...');
+            showQuestion();
         }
     };
     
-    const checkAnswer = (index) => {
-        if (answerButtons[index].dataset.correct === 'true') {  // Überprüfen des Datenattributs anstelle des Textinhalts
-            correctAnswers++;
+    // Funktion zur Überprüfung der Antwort
+    const checkAnswer = async (index) => {
+        if (useApi) {
+            const result = await checkAnswerExternHTW(index); // Übergeben Sie den Index des gedrückten Knopfes
+            if (result === 1) {
+                correctAnswers++;
+            }
+        } else {
+            if (answerButtons[index].dataset.correct === 'true') {
+                correctAnswers++;
+            }
         }
         currentQuestionIndex++;
         showQuestion();
@@ -174,7 +199,7 @@ const showCategory = (category) => {
     };
     
 
-    // Anzeigen des Ergebnis
+    // Funktion zum Anzeigen des Ergebnisses
     const showResult = () => {
         questionSection.style.display = 'none';
         resultSection.style.display = 'block';
@@ -189,7 +214,8 @@ const showCategory = (category) => {
         const progressCircle = document.querySelector('.progress');
         const offset = 565.48 - (565.48 * correctPercentage / 100);
         progressCircle.style.strokeDashoffset = offset;
-    
+
+        // Bestimme die Nachricht basierend auf dem prozentualen Ergebnis
         let message;
         if (correctPercentage < 20) {
             message = "Oh Oh, da muss aber jemand noch fleißig lernen.";
@@ -213,22 +239,95 @@ const showCategory = (category) => {
     }, 5000);  
 };
 
-    
-    // Starte das Quiz neu
-    const restartQuiz = () => {
+// Funktion zum Neustarten des Quiz
+const restartQuiz = () => {
+    if (currentCategory) {
+        showCategory(currentCategory);
+    } else {
         showHome();
-    };
+    }
+};
 
-    // Lade Fragen von einer API
-    const loadQuestionsFromApi = async () => {
-        try {
-            const response = await fetch('https://api.example.com/questions');
-            const data = await response.json();
-            questions = data;
-        } catch (error) {
-            console.error('Fehler beim Laden der Fragen:', error);
+// Lade Fragen von einer API
+const loadQuestionsFromApi = async () => {
+    QuizId = Math.floor(Math.random() * 101);
+    const url = "https://idefix.informatik.htw-dresden.de:8888/api/quizzes/?page=" + QuizId;
+    console.log('URL:', url);
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Basic " + btoa("test@gmail.com:secret"),
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    };
+
+        const data = await response.json();
+        const questionsFromApi = data.content.map(q => ({
+            a: q.text,
+            l: q.options,
+            id: q.id,
+        }));
+
+        // Wenn keine Fragen geladen wurden, rufe die Funktion erneut auf
+        if (questionsFromApi.length === 0) {
+            console.log('Keine Fragen geladen, versuche es erneut...');
+            return loadQuestionsFromApi();
+        }
+
+        questions = questionsFromApi;
+        console.log(questions);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+
+
+// Funktion zum Überprüfen der Antwort über eine externe API
+async function checkAnswerExternHTW(index) {
+    // URL für die Anfrage an die API
+    const url = "https://idefix.informatik.htw-dresden.de:8888/api/quizzes/" + questions[currentQuestionIndex].id + "/solve";
+    
+    // Antwort des Benutzers
+    let answer = [index]; 
+
+    console.log('Sende Anfrage an URL:', url);
+    console.log('Gesendete Antwort:', answer);
+
+    try {
+        // Senden der Anfrage an die API
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Basic " + btoa("test@gmail.com:secret")
+            },
+            body: JSON.stringify(answer)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Verarbeiten der Antwort der API
+        const results = await response.json();
+        console.log('Antwort des Servers:', results);
+
+        // Rückgabe des Ergebnisses (1 für korrekte Antwort, null für falsche Antwort)
+        return results.success ? 1 : null;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+}
+
+
 
     // Mische ein Array
     const shuffleArray = (array) => {
@@ -242,11 +341,12 @@ const showCategory = (category) => {
     // Füge Funktionen dem globalen Objekt hinzu
     window.showHome = showHome;
     window.showCategory = showCategory;
-    window.toggleApi = toggleApi;
+    window.enableApi = enableApi;
+    window.disableApi = disableApi;
     window.startQuiz = startQuiz;
     window.checkAnswer = checkAnswer;
     window.restartQuiz = restartQuiz;
-    window.startQuizAndHideButton = startQuizAndHideButton;
+    window.loadQuestionsFromApi = loadQuestionsFromApi;
 
     // Zeige die Startseite an
     showHome();

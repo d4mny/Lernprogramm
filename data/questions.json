@@ -36,18 +36,16 @@
         {"a": "Was ist die Hauptstadt von Japan?", "l": ["Tokio", "Kyoto", "Osaka", "Nagoya"]},
         {"a": "Welcher Planet ist der größte in unserem Sonnensystem?", "l": ["Jupiter", "Saturn", "Uranus", "Neptun"]}
     ],
-    
-        "noten": [
-            {"a": "Welche Note liegt eine Oktave niedriger als C5", "l": ["c/4", "d/4", "e/4", "f/4"]},
-            {"a": "e/4", "l": ["c/4", "e/4", "f/4", "d/4"]},
-            {"a": "g/4", "l": ["g/4", "a/4", "b/4", "c/4"]},
-            {"a": "d/4", "l": ["d/4", "e/4", "f/4", "g/4"]},
-            {"a": "a/4", "l": ["a/4", "b/4", "c/5", "d/5"]},
-            {"a": "b/4", "l": ["b/4", "c/5", "d/5", "e/5"]},
-            {"a": "f/4", "l": ["f/4", "g/4", "a/4", "b/4"]},
-            {"a": "c/5", "l": ["c/5", "d/5", "e/5", "f/5"]},
-            {"a": "e/5", "l": ["e/5", "f/5", "g/5", "a/5"]},
-            {"a": "g/5", "l": ["g/5", "a/5", "b/5", "c/6"]}
+     "noten": [
+        {"a": "Welche Note liegt eine Oktave höher als A3?", "l": ["a/4", "b/4", "c/5", "d/5"]},
+        {"a": "Welche Note liegt eine Quinte über G3?", "l": ["d/4", "e/4", "f/4", "g/4"]},
+        {"a": "Welche Note liegt eine Terz unter E4?", "l": ["c/4", "d/4", "f/4", "g/4"]},
+        {"a": "Welche Note liegt eine Quarte über C4?", "l": ["f/4", "g/4", "a/4", "b/4"]},
+        {"a": "Welche Note liegt eine Oktave tiefer als F5?", "l": ["f/4", "g/4", "a/4", "b/4"]},
+        {"a": "Welche Note liegt eine große Sekunde über D4?", "l": ["e/4", "f/4", "g/4", "a/4"]},
+        {"a": "Welche Note liegt eine Quinte unter B4?", "l": ["e/4", "f/4", "g/4", "a/4"]},
+        {"a": "Welche Note liegt eine große Terz über E3?", "l": ["g#/3", "a/3", "b/3", "c/4"]},
+        {"a": "Welche Note liegt eine Quarte unter A4?", "l": ["e/4", "f/4", "g/4", "b/4"]},
+        {"a": "Welche Note liegt eine kleine Sekunde über B3?", "l": ["c/4", "d/4", "e/4", "f/4"]}
         ]
     }
-    
